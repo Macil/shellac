@@ -23,8 +23,13 @@ describe('providing environment values', () => {
   })
 
   it('should make it easy to pass through more vars', async () => {
+    const testEnv = {
+      EDITOR: "nano",
+      EXTRA: "value",
+      EXTRA2: "value2",
+    }
     const { stdout } = await shellac.env(
-      pick(process.env, ['EDITOR', 'TMPDIR'])
+      pick(testEnv, ['EDITOR', 'EXTRA'])
     )`
       $ env
     `
@@ -34,10 +39,10 @@ describe('providing environment values', () => {
     )
 
     expect(Object.keys(envs)).toEqual(
-      expect.arrayContaining(['EDITOR','TMPDIR'])
+      expect.arrayContaining(['EDITOR','EXTRA'])
     )
-    expect(envs.EDITOR).toBe(process.env.EDITOR)
-    expect(envs.TMPDIR).toBe(process.env.TMPDIR)
+    expect(envs.EDITOR).toBe(testEnv.EDITOR)
+    expect(envs.EXTRA).toBe(testEnv.EXTRA)
   })
 
   it('should allow adding new envs', async () => {
